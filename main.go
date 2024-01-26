@@ -38,6 +38,7 @@ import (
 	"os"
 	"strings"
 	"time"
+
 	"github.com/fw42/go-hpfeeds"
 )
 
@@ -150,7 +151,7 @@ func FakeNodes(w http.ResponseWriter, r *http.Request) {
               "ip" : "127.0.1.1",
               "version" : "%s",
               "build" : "89d3241",
-              "http_address" : "inet[/%s:9200]",
+              "http_address" : "inet[/%s:5432]",
               "os" : {
                 "refresh_interval_in_millis" : 1000,
                 "available_processors" : 12,
@@ -182,8 +183,8 @@ func FakeNodes(w http.ResponseWriter, r *http.Request) {
                 "publish_address" : "inet[/%s:9300]"
               },
               "http" : {
-                "bound_address" : "inet[/0:0:0:0:0:0:0:0:9200]",
-                "publish_address" : "inet[/%s:9200]",
+                "bound_address" : "inet[/0:0:0:0:0:0:0:0:5432]",
+                "publish_address" : "inet[/%s:5432]",
                 "max_content_length_in_bytes" : 104857600
               }}
             }
@@ -339,7 +340,6 @@ func hpfeedsConnect() {
 	}
 }
 
-
 func main() {
 	flag.Parse()
 	// Get the config file
@@ -377,8 +377,8 @@ func main() {
 	http.HandleFunc("/_nodes", FakeNodes)
 	http.HandleFunc("/_search", FakeSearch)
 	if *verboseFlag {
-		logger.Printf("Listening on :9200")
+		logger.Printf("Listening on :5432")
 	}
 	// Start the server
-	http.ListenAndServe(":9200", nil)
+	http.ListenAndServe(":5432", nil)
 }
